@@ -1,6 +1,7 @@
 const DB = require('../db/connect')
 const fs = require("fs");
 const { parse } = require("csv-parse");
+const path = require('path')
 
 // set up the db client
 const db = new DB({
@@ -15,21 +16,21 @@ const db = new DB({
 db.connect();
 
 // Fill imdb data into imdb table
-// fs.createReadStream("../data-source/imdb_top_1000.csv")
-// .pipe(parse({ delimiter: ",", from_line: 2 }))
-// .on("data", function (row) {
-//     db.pool.query('INSERT INTO movieworld.imdb (title, rating) VALUES (?, ?)', [row[1], row[6]], function (error, results, fields) {
-//         if (error) {
-// //             console.error(error)
-//         }
-//     });
-// })
-// .on("end", function () {
-//     console.log("finished");
-// })
-// .on("error", function (error) {
-//     console.log(error.message);
-// });
+fs.createReadStream(path.join(__dirname,"../data-source/imdb_top_1000.csv"))
+.pipe(parse({ delimiter: ",", from_line: 2 }))
+.on("data", function (row) {
+    db.pool.query('INSERT INTO movieworld.imdb (title, rating) VALUES (?, ?)', [row[1], row[6]], function (error, results, fields) {
+        if (error) {
+//             console.error(error)
+        }
+    });
+})
+.on("end", function () {
+    console.log("finished");
+})
+.on("error", function (error) {
+    console.log(error.message);
+});
 
 // Fill provider movie data into movies table
 let moviesData = [
@@ -182,7 +183,7 @@ function readMoviesFromCSV() {
     let promises = []
     moviesData.forEach((data) => {
         promises.push(new Promise((resolve) => {
-            fs.createReadStream("../data-source/"+data.csvName)
+            fs.createReadStream(path.join(__dirname, "../data-source/"+data.csvName))
             .pipe(parse({ delimiter: ",", from_line: 2 }))
             .on("data", function (row) {
                 data.movies.push(row)
