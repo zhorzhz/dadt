@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css"/>
+    <title>Provider Details</title>
+</head>
+<body class="container" style="background-color: #f9fafc">
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Home</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <canvas  id="ratings" height="400" width="400"></canvas>
+</main>
+
+<script src="chart.js/dist/chart.js"></script>
+<script src="jquery/dist/jquery.js" charset="utf-8"></script>
+<script src="bootstrap/dist/js/bootstrap.js" charset="utf-8"></script>
+<script>
+    const backgroundColors = ['#3B429F', '#aa7dce', '#219ebc', '#f4a5ae', '#023047', '#d0aad9', '#5751ab', '#ffd60a', '#d90429', '#a7c957', '#02c39a']
+
+    const data = '<%- JSON.stringify(data) %>'
+    const data_parsed = JSON.parse(data)
+    const ratings = data_parsed.map(o => o.rating)
+    const movie_counts = data_parsed.map(o => o.count)
+
+    const ctx = document.getElementById('ratings').getContext('2d');
+    const ratingsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ratings,
+            datasets: [{
+                label: 'Rating',
+                data: movie_counts,
+                backgroundColor: backgroundColors,
+                borderWidth: 1
+            }]
+        },
+        options: {}
+    })
+</script>
+</body>
+</html>
