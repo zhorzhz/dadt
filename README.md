@@ -1,3 +1,4 @@
+NOTE: Make sure you are in `dadt` directory, otherwise do `cd dadt`
 # How to run the import
 * run in the terminal `node ./bin/data_import`
 

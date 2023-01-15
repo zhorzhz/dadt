@@ -24,7 +24,7 @@ app.use('/', indexRouter);
 // Add static services from node modules static
 const statics = ['bootstrap', 'jquery', 'chart.js'];
 statics.forEach(dep => {
-  app.use(`/${dep}`, express.static(path.resolve(`node_modules/${dep}`)));
+  app.use(`/${dep}`, express.static(path.join(__dirname, `node_modules/${dep}`)));
 });
 
 // catch 404 and forward to error handler
